@@ -1,0 +1,11 @@
+{
+  "name": "zp-task-board",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "summary": "node scripts/tasks.mjs summary",
+    "decrypt": "node scripts/tasks.mjs decrypt",
+    "encrypt": "node scripts/tasks.mjs encrypt",
+    "test": "node scripts/tasks.mjs selftest"
+  }
+}
