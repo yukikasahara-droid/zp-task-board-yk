@@ -1,11 +1,11 @@
 # Claude ルーティン設定（Slack → タスクボード同期）
 
 Claude Code のルーティン「Slack指示タスク→タスクボード同期」に登録しているプロンプトの控えです。
-実際の登録内容では `<共有パスワード>` の部分に本物のパスワードが入っています（このファイルには書かない）。
+パスワードはプロンプトに書かず、Claude Code のクラウド環境の環境変数 `TASKBOARD_PASSWORD` に登録しています。
 
-- スケジュール: 平日 9:00 と 18:00（JST）
+- スケジュール: 平日 8:55 と 17:55（JST）
 - 実行のたびに新しいセッションを起動
-- 使うコネクタ: Slack, GitHub（Claude Code Remote 経由でリポジトリを取得・push）
+- 使うコネクタ: Slack（ルーティン設定画面で追加）、Claude Code Remote（リポジトリの取得・push に使用）
 
 ---
 
@@ -16,8 +16,8 @@ GitHub リポジトリ yukikasahara-droid/zp-task-board-yk のタスクデータ
 
 ■ 準備
 1. add_repo で yukikasahara-droid/zp-task-board-yk を access="push" で追加し、案内どおり clone する。以降はそのディレクトリで作業する。
-2. 環境変数を設定: export TASKBOARD_PASSWORD='<共有パスワード>'
-   ※このパスワードをファイル・コミット・Slack・ログ出力に絶対に書かないこと。
+2. 復号パスワードは環境変数 TASKBOARD_PASSWORD に設定済み（クラウド環境の設定で登録）。`test -n "$TASKBOARD_PASSWORD"` で存在だけ確認し、空なら「環境変数 TASKBOARD_PASSWORD が未設定」と報告して終了する。
+   ※パスワードの値を表示・ファイル保存・コミット・Slack投稿しないこと。
 3. `node scripts/tasks.mjs summary` を実行し、latestTs（登録済みの最新Slack TS）と open（未完了タスク一覧）を確認する。
 
 ■ 新規タスクの検出
@@ -47,7 +47,7 @@ GitHub リポジトリ yukikasahara-droid/zp-task-board-yk のタスクデータ
 9. `node scripts/tasks.mjs apply /tmp/changes.json` を実行する。エラーが出たら内容を直して再実行。
 10. 追加も更新も0件なら、commit せずに終了する。
 11. 変更があれば data/tasks.enc.json だけを add して commit（メッセージ例: "sync: 新規2件・完了1件"）し、`git push origin HEAD:main` する。
-    push が競合したら `git pull --rebase origin main` は使わず、clone し直して手順3からやり直す。
+    push が競合したら clone し直して手順3からやり直す。
     data/tasks.json（平文）や changes.json は絶対に commit しない。
 
 ■ 報告

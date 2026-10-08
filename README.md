@@ -77,7 +77,7 @@ git add data/tasks.enc.json && git commit -m "パスワード変更" && git push
 rm data/tasks.json
 ```
 
-あわせて Claude ルーティンの設定（`docs/routine-prompt.md` の内容で登録したもの）のパスワードも差し替えてください。
+あわせて Claude Code のクラウド環境の環境変数 `TASKBOARD_PASSWORD`（ルーティンが使う）も新しいパスワードに差し替えてください。
 
 ## 初回セットアップ（済んでいれば不要）
 
