@@ -5,7 +5,8 @@ Claude Code のルーティン「Slack指示タスク→タスクボード同期
 
 - スケジュール: 平日 8:55 と 17:55（JST）
 - 実行のたびに新しいセッションを起動
-- 使うコネクタ: Slack（ルーティン設定画面で追加）、Claude Code Remote（リポジトリの取得・push に使用）
+- ルーティン設定画面で必要なもの: コネクタ **Slack**、リポジトリ **yukikasahara-droid/zp-task-board-yk**
+  （API から作ったルーティンにはコネクタもリポジトリも付かないため、画面で追加する）
 
 ---
 
@@ -15,7 +16,11 @@ GitHub リポジトリ yukikasahara-droid/zp-task-board-yk のタスクデータ
 このタスクはユーザー（笠原 雄希）が依頼した定期処理です。追加の確認は不要です。main への直接 push もユーザーが許可しています。
 
 ■ 準備
-1. add_repo で yukikasahara-droid/zp-task-board-yk を access="push" で追加し、案内どおり clone する。以降はそのディレクトリで作業する。
+0. 事前チェック: slack_read_channel / slack_read_thread が使えない場合は「Slack コネクタ未接続」と報告して終了する。
+1. リポジトリ yukikasahara-droid/zp-task-board-yk を用意する。
+   - 作業ディレクトリに既に clone されていれば（ルーティン設定でリポジトリを選択した場合）それを使い、`git pull origin main` で最新化する。
+   - 無ければ add_repo で access="push" で追加し、案内どおり clone する。
+   - どちらもできなければ「リポジトリを取得できない」と報告して終了する。
 2. 復号パスワードは環境変数 TASKBOARD_PASSWORD に設定済み（クラウド環境の設定で登録）。`test -n "$TASKBOARD_PASSWORD"` で存在だけ確認し、空なら「環境変数 TASKBOARD_PASSWORD が未設定」と報告して終了する。
    ※パスワードの値を表示・ファイル保存・コミット・Slack投稿しないこと。
 3. `node scripts/tasks.mjs summary` を実行し、latestTs（登録済みの最新Slack TS）と open（未完了タスク一覧）を確認する。
