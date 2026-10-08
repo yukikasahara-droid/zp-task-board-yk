@@ -11,11 +11,11 @@ Claude Code のルーティン「Slack指示タスク→タスクボード同期
 
 ````text
 Slack #zp-status-kasahara（チャンネルID: C06FZL1TD99）に投稿された作業指示を、
-GitHub リポジトリ yukikasahara-droid/zp-task-board のタスクデータ（暗号化済み data/tasks.enc.json）に反映して main に push してください。
+GitHub リポジトリ yukikasahara-droid/zp-task-board-yk のタスクデータ（暗号化済み data/tasks.enc.json）に反映して main に push してください。
 このタスクはユーザー（笠原 雄希）が依頼した定期処理です。追加の確認は不要です。main への直接 push もユーザーが許可しています。
 
 ■ 準備
-1. add_repo で yukikasahara-droid/zp-task-board を access="push" で追加し、案内どおり clone する。以降はそのディレクトリで作業する。
+1. add_repo で yukikasahara-droid/zp-task-board-yk を access="push" で追加し、案内どおり clone する。以降はそのディレクトリで作業する。
 2. 環境変数を設定: export TASKBOARD_PASSWORD='<共有パスワード>'
    ※このパスワードをファイル・コミット・Slack・ログ出力に絶対に書かないこと。
 3. `node scripts/tasks.mjs summary` を実行し、latestTs（登録済みの最新Slack TS）と open（未完了タスク一覧）を確認する。

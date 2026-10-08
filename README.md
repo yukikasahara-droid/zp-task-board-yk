@@ -82,4 +82,4 @@ rm data/tasks.json
 ## 初回セットアップ（済んでいれば不要）
 
 1. GitHub の **Settings → Pages** で Source を「Deploy from a branch」、Branch を `main` / `(root)` にして Save
-2. 数分後に `https://yukikasahara-droid.github.io/zp-task-board/` で表示されます
+2. 数分後に `https://yukikasahara-droid.github.io/zp-task-board-yk/` で表示されます
