@@ -4,7 +4,8 @@
 **作業を始めたら「現在の状況」を確認し、終えたら「作業ログ」に1行追記してコミットすること。**
 
 最終更新: 2026-10-08 夜（クラウド版 Claude Code）
-**⚠ 10/8 夜に要件が大きく変わった。まず `docs/REQUIREMENTS.md` を読むこと。**
+**⚠ 10/8 夜に要件が大きく変わった。まず `docs/REQUIREMENTS.md`（決定事項あり）と `docs/SETUP-GOOGLE.md` を読むこと。**
+新方式: データは Google スプレッドシート `1LAMK-h_1b8NNzrDAhmRn9KZKtE7lfRyHwtjpLwyeBsQ`（Drive）。旧方式（暗号化JSON）は新画面の完成まで残す。
 
 ---
 
