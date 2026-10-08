@@ -1,6 +1,8 @@
 # ZPタスクボード
 
 Slack `#zp-status-kasahara` で出した作業指示を一覧で見るための、パスワード付き静的サイトです。
+開発・引き継ぎ情報は [`docs/HANDOFF.md`](docs/HANDOFF.md) と [`CLAUDE.md`](CLAUDE.md) を参照。
+
 （以前は Notion「Slack指示タスク（zp-status-kasahara）」で管理していたもの。2026-10-07 に全70件＋その後の新着4件を移行済み）
 
 ## 使い方（メンバー向け）
