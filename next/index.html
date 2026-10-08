@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#1f3864">
+  <title>ZPタスクボード</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <!-- ログイン前 -->
+  <main id="login" class="login" hidden>
+    <div class="login-card">
+      <h1>ZPタスクボード</h1>
+      <p class="muted">会社の Google アカウントでログインしてください。</p>
+      <button id="login-btn" class="primary" type="button">Google でログイン</button>
+      <p id="login-msg" class="msg" hidden></p>
+    </div>
+  </main>
+
+  <!-- ログイン後 -->
+  <div id="app" hidden>
+    <header class="top">
+      <div class="top-inner">
+        <h1>ZPタスクボード</h1>
+        <span id="sync" class="muted small"></span>
+        <button id="refresh" class="icon-btn" type="button" aria-label="更新" title="更新">⟳</button>
+        <button id="user" class="user-btn small" type="button" title="ログアウト"></button>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <p id="banner" class="banner" hidden></p>
+      <div id="people" class="people" role="tablist" aria-label="担当者"></div>
+      <input id="q" class="search" type="search" placeholder="タスクを検索" aria-label="タスクを検索">
+      <div id="sections"></div>
+    </main>
+
+    <button id="fab" class="fab" type="button" aria-label="タスクを追加">＋</button>
+  </div>
+
+  <!-- 追加・編集 -->
+  <dialog id="editor" class="sheet">
+    <form id="editor-form" method="dialog">
+      <header class="sheet-head">
+        <h2 id="editor-title">タスク</h2>
+        <button type="button" class="icon-btn" id="editor-close" aria-label="閉じる">✕</button>
+      </header>
+
+      <label class="field"><span>タスク名</span>
+        <input id="f-title" required maxlength="200" autocomplete="off">
+      </label>
+
+      <label class="field"><span>メモ・詳しい内容</span>
+        <textarea id="f-body" rows="3"></textarea>
+      </label>
+
+      <div class="field"><span>担当者</span>
+        <div id="f-assignees" class="chips"></div>
+      </div>
+
+      <div class="field"><span>納期</span>
+        <div class="row">
+          <input id="f-due" type="date">
+          <div class="quick" id="f-due-quick"></div>
+        </div>
+      </div>
+
+      <div class="field"><span>重さ（作業量の目安）</span>
+        <div id="f-size" class="seg"></div>
+      </div>
+
+      <div class="field"><span>状態</span>
+        <div id="f-status" class="seg"></div>
+      </div>
+
+      <div class="field"><span>先に終わらせるタスク（前提）</span>
+        <div id="f-blocked-chips" class="chips"></div>
+        <input id="f-blocked-q" type="search" placeholder="前提にするタスクを探す" autocomplete="off">
+        <ul id="f-blocked-list" class="pick"></ul>
+      </div>
+
+      <p id="editor-meta" class="muted small"></p>
+      <p id="editor-error" class="msg" hidden></p>
+
+      <footer class="sheet-foot">
+        <a id="editor-slack" class="link small" target="_blank" rel="noopener" hidden>Slack で元のメッセージを開く ↗</a>
+        <button type="submit" class="primary" id="editor-save">保存</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" hidden>
+    <span id="toast-text"></span>
+    <button id="toast-action" type="button" class="link"></button>
+  </div>
+  <noscript>このページには JavaScript が必要です。</noscript>
+</body>
+</html>
