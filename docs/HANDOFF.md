@@ -33,8 +33,8 @@
   - 平日 8:55 / 17:55 JST、毎回新規セッション。プロンプトは `docs/routine-prompt.md` と同じ内容
 - [x] 絞り込み状態の URL 共有（`#who=担当者&st=未着手,進行中&due=over&q=語`）と「この表示のリンクをコピー」ボタン
 
-### ユーザー側の設定待ち（2026-10-08 夜に確認: 3つとも未設定）
-- [ ] GitHub **Settings → Pages**: Deploy from a branch / `main` / `(root)`（API で `has_pages: false` を確認）
+### ユーザー側の設定待ち
+- [x] GitHub **Settings → Pages**: Deploy from a branch / `main` / `(root)`（10/8 夜に設定済み・`has_pages: true` を確認）
 - [ ] Claude Code クラウド環境に環境変数 `TASKBOARD_PASSWORD` を登録（ルーティンが使う）
 - [ ] claude.ai のルーティン画面で、上記ルーティンに **Slack コネクタ**と**リポジトリ `zp-task-board-yk`** を追加
   （API から作成したため、どちらも付いていない）
