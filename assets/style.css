@@ -89,7 +89,8 @@ input[type="search"], input[type="password"], select {
 .top { background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1; }
 .top-inner { max-width: 960px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: baseline; gap: 12px; }
 .top h1 { font-size: 1.1rem; margin: 0; }
-.link-btn { margin-left: auto; background: none; border: 0; color: var(--accent); cursor: pointer; padding: 4px; }
+.top .link-btn { margin-left: auto; }
+.link-btn { background: none; border: 0; color: var(--accent); cursor: pointer; padding: 4px; }
 
 .wrap { max-width: 960px; margin: 0 auto; padding: 16px; }
 .howto {
@@ -136,6 +137,9 @@ input[type="search"], input[type="password"], select {
 .chip.on { background: var(--text); color: var(--bg); border-color: var(--text); }
 
 /* ---------- 一覧 ---------- */
+.count-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.count-row p { margin: 0; }
+
 .list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 .card {
   background: var(--surface);

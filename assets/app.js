@@ -62,11 +62,39 @@ async function unlock(password, remember) {
 function loadFilter() {
   try {
     const saved = JSON.parse(store.get(FILTER_KEY) || 'null');
-    if (!saved) return;
-    filter.assignee = saved.assignee ?? '';
-    filter.sort = saved.sort ?? 'due';
-    if (Array.isArray(saved.statuses)) filter.statuses = new Set(saved.statuses.filter((s) => STATUSES.includes(s)));
+    if (saved) {
+      filter.assignee = saved.assignee ?? '';
+      filter.sort = saved.sort ?? 'due';
+      if (Array.isArray(saved.statuses)) filter.statuses = new Set(saved.statuses.filter((s) => STATUSES.includes(s)));
+    }
   } catch { /* 壊れていたら初期値のまま */ }
+  loadHash();
+}
+
+// URL の # 以降で絞り込み状態を共有できるようにする（例 #who=笠原 雄希&st=未着手,進行中）
+// 端末に保存した絞り込みより、リンクで指定された内容を優先する
+function loadHash() {
+  const p = new URLSearchParams(location.hash.slice(1));
+  if (p.has('who')) filter.assignee = p.get('who');
+  if (p.has('st')) filter.statuses = new Set(p.get('st').split(',').filter((s) => STATUSES.includes(s)));
+  filter.overdueOnly = p.get('due') === 'over';
+  if (p.has('q')) {
+    filter.q = p.get('q');
+    $('q').value = filter.q;
+  }
+}
+function hashFromFilter() {
+  const p = new URLSearchParams();
+  if (filter.assignee) p.set('who', filter.assignee);
+  if (filter.overdueOnly) p.set('due', 'over');
+  else p.set('st', STATUSES.filter((s) => filter.statuses.has(s)).join(','));
+  if (filter.q) p.set('q', filter.q);
+  return '#' + p.toString();
+}
+function syncHash() {
+  try {
+    history.replaceState(null, '', hashFromFilter());
+  } catch { /* file:// 等で使えない場合は何もしない */ }
 }
 function saveFilter() {
   store.set(FILTER_KEY, JSON.stringify({ assignee: filter.assignee, sort: filter.sort, statuses: [...filter.statuses] }));
@@ -190,6 +218,7 @@ function render() {
 
   const shown = tasks.filter(matches).sort(compare);
   $('count').textContent = filter.overdueOnly ? `期限切れ ${shown.length} 件` : `${shown.length} 件`;
+  syncHash();
   $('list').replaceChildren(...(shown.length ? shown.map(card) : [el('li', 'empty muted', '該当するタスクはありません')]));
 }
 
@@ -215,6 +244,16 @@ $('lock-form').addEventListener('submit', async (e) => {
 $('q').addEventListener('input', (e) => { filter.q = e.target.value.trim(); render(); });
 $('assignee').addEventListener('change', (e) => { filter.assignee = e.target.value; saveFilter(); render(); });
 $('sort').addEventListener('change', (e) => { filter.sort = e.target.value; saveFilter(); render(); });
+$('copy-link').addEventListener('click', async () => {
+  const btn = $('copy-link');
+  try {
+    await navigator.clipboard.writeText(location.href);
+    btn.textContent = 'コピーしました';
+  } catch {
+    prompt('このリンクをコピーしてください', location.href);
+  }
+  setTimeout(() => { btn.textContent = 'この表示のリンクをコピー'; }, 2000);
+});
 $('logout').addEventListener('click', () => {
   store.del(PW_KEY);
   tasks = [];
