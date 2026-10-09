@@ -16,12 +16,14 @@ export const MOCK_PROFILE = { name: '笠原 雄希', email: 'me@example.com' };
 
 const t = (id, title, o = {}) => ({
   id, title, body: '', assignees: ['笠原 雄希'], status: '未着手', assignedOn: rel(-5), due: null,
-  completedOn: null, size: '', blockedBy: [], source: 'slack', slackUrl: '', updatedAt: '', updatedBy: '', ...o,
+  completedOn: null, size: '', blockedBy: [], source: 'slack', slackUrl: '', updatedAt: '', updatedBy: '',
+  links: '', repeat: '', seriesId: '', ...o,
 });
 
 export function createMockStore() {
   let tasks = [
-    t('m1', '試作機の電源ユニット発注', { due: rel(1), size: 'M', body: '見積もりは取得済み。型番は先週のメモを参照', assignedOn: rel(-6) }),
+    t('m1', '試作機の電源ユニット発注', { due: rel(1), size: 'M', body: '見積もりは取得済み。型番は先週のメモを参照', assignedOn: rel(-6), links: '見積書 | https://example.com/quote.pdf\nhttps://example.com/catalog' }),
+  t('m13', '週次の備品棚チェック', { due: rel(0), size: 'S', assignees: ['小𠩤のあ'], repeat: 'weekly:金', seriesId: 'm13', body: '減っている消耗品をメモ' }),
     t('m2', '評価用の治具を3Dプリント', { due: rel(3), size: 'S', assignees: ['小𠩤のあ'], blockedBy: ['m3'], body: '図面が確定したら出力する' }),
     t('m3', '治具の図面を確定', { due: rel(10), size: 'M', status: '進行中' }),
     t('m4', 'ファームウェアの首向き更新', { due: rel(-2), size: 'L', body: 'ボタン押下時に前を向くように' }),
@@ -34,10 +36,18 @@ export function createMockStore() {
     t('m11', '梱包材の預かり証を依頼', { status: '完了', completedOn: rel(-1), assignedOn: rel(-8) }),
     t('m12', 'B卓の機体追加', { status: '完了', completedOn: rel(-3), assignedOn: rel(-9), assignees: ['小𠩤のあ'] }),
   ];
+  let comments = [
+    { taskId: 'm1', at: new Date(Date.now() - 3600e3 * 5).toISOString(), by: '味岡 俊嘉', text: '型番はこちらで確認しておきました。', source: 'site' },
+    { taskId: 'm1', at: new Date(Date.now() - 3600e3).toISOString(), by: '小𠩤のあ', text: '納期の回答待ちです。', source: 'slack' },
+  ];
+  let times = [{ taskId: 'm3', date: rel(-1), by: '笠原 雄希', minutes: 90, note: '' }];
   const clone = (x) => ({ ...x, assignees: [...x.assignees], blockedBy: [...x.blockedBy] });
   const wait = () => new Promise((r) => setTimeout(r, 120));
   return {
-    async load() { await wait(); return { tasks: tasks.map(clone), members: MOCK_MEMBERS }; },
+    async load() {
+      await wait();
+      return { tasks: tasks.map(clone), members: MOCK_MEMBERS, comments: comments.map((c) => ({ ...c })), times: times.map((x) => ({ ...x })), sizeMinutes: { S: 60, M: 240, L: 480, '': 120 } };
+    },
     async patch(id, fields, who) { return (await this.patchMany([id], fields, who))[0]; },
     async patchMany(ids, fields, who) {
       await wait();
@@ -48,11 +58,24 @@ export function createMockStore() {
         return clone(tasks[i]);
       });
     },
-    async add(task, who) {
+    async add(task, who, { unique = false } = {}) {
       await wait();
+      if (unique && tasks.some((x) => x.id === task.id)) return null;
       const full = { ...task, updatedAt: new Date().toISOString(), updatedBy: who };
       tasks = [...tasks, full];
       return clone(full);
+    },
+    async addComment(taskId, text, who) {
+      await wait();
+      const c = { taskId, at: new Date().toISOString(), by: who, text, source: 'site' };
+      comments = [...comments, c];
+      return { ...c };
+    },
+    async addTime(taskId, minutes, who, date) {
+      await wait();
+      const x = { taskId, date, by: who, minutes, note: '' };
+      times = [...times, x];
+      return { ...x };
     },
   };
 }

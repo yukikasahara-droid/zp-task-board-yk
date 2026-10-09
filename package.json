@@ -6,6 +6,6 @@
     "summary": "node scripts/tasks.mjs summary",
     "decrypt": "node scripts/tasks.mjs decrypt",
     "encrypt": "node scripts/tasks.mjs encrypt",
-    "test": "node scripts/tasks.mjs selftest && node scripts/test-priority.mjs"
+    "test": "node scripts/tasks.mjs selftest && node scripts/test-priority.mjs && node scripts/test-repeat.mjs && node scripts/test-text.mjs && node scripts/test-sheets.mjs"
   }
 }

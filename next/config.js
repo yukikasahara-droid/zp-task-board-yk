@@ -3,6 +3,7 @@
 export const CONFIG = {
   sheetId: '1LAMK-h_1b8NNzrDAhmRn9KZKtE7lfRyHwtjpLwyeBsQ',
   tasksTab: 'tasks',
+  managerGid: 6, // 「マネージャー集計」タブ（スプレッドシートのURL末尾の gid）
   membersTab: 'members',
   // docs/SETUP-GOOGLE.md の手順2で作った「クライアントID」を入れる（xxxx.apps.googleusercontent.com）
   clientId: '',

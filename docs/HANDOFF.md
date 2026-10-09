@@ -50,6 +50,27 @@
 - 担当者の Slack ユーザーID と表示名の対応表はプロンプトに直書き。メンバーが増えたら `docs/routine-prompt.md` とルーティン本体の両方を更新する必要がある。
 - ルーティンの実行ログは各回のセッションにしか残らない（失敗に気づきにくい）。
 
+## 新方式のデータ構造（Google スプレッドシート `1LAMK-h_1b8NNzrDAhmRn9KZKtE7lfRyHwtjpLwyeBsQ`）
+
+| タブ | 内容 | 誰が書くか |
+|---|---|---|
+| `tasks` | タスク本体。列: id, title, body, assignees, status, assignedOn, due, completedOn, size, blockedBy, source, slackUrl, updatedAt, updatedBy, links, repeat, seriesId | 画面 / ルーティン |
+| `comments` | コメント（追記のみ）。taskId, at, by, text, source | 画面 / ルーティン |
+| `timelog` | 作業時間（追記のみ）。taskId, date, by, minutes, note | 画面 |
+| `members` | 担当者表。name, email, weeklyHours | 手で管理 |
+| `設定` | 重さ→想定時間（分）、要整理にする日数 | 手で管理 |
+| `マネージャー集計` | 担当者別の負荷・稼働の集計（すべて数式。書き換えない） | 数式 |
+| `列の説明` | 列の意味のメモ | 手で管理 |
+
+- 列は**列名**で読み書きするので、並び順を変えても動く。列を足すときは `next/sheets.js` の `COLS` にも足す（足さないと画面が保存するときに空にしてしまう）。
+- 画面は **RAW 書き込み**（数式として解釈されない）。ルーティン（Google Sheets コネクタ）は画面と同じ解釈をするので、id・日付は先頭に `'` を付ける。
+
+## 開発とテスト
+
+- ローカル表示: `python3 -m http.server 8768` → `http://localhost:8768/next/index.html?mock=1`（仮データ。Google 不要）
+- `npm test`: 旧データ操作 / 優先度 / くり返し / リンク・時間の表記 / スプレッドシート連携（偽の Sheets API で試験）
+- 実際の Google につなぐ確認は、クライアントID設定後（下の切り替え手順 2）
+
 ## 切り替え（カットオーバー）の手順 ― 新画面を本番にする
 
 新画面は `next/` に作成済み（Google ログインの設定待ち）。本番（旧画面）は `index.html` のまま動いている。
@@ -86,3 +107,4 @@
 | 2026-10-08 夜 | クラウド版 Claude Code | URL での絞り込み共有を追加。初回ルーティン失敗の原因調査、ルーティンのプロンプトを堅牢化。設定完了後の手動実行で正常動作を確認 |
 | 2026-10-08 夜 | クラウド版 Claude Code | ユーザーの要件変更（編集・カメラ・優先度・1タップ完了）を `REQUIREMENTS.md` に記録。技術選定の確認待ち |
 | 2026-10-09 | クラウド版 Claude Code | データを Google スプレッドシートへ移行（74件）。新画面 `next/`（優先度・1タップ完了・編集）、ルーティン v2 案を作成。Google ログイン設定待ち |
+| 2026-10-09 | クラウド版 Claude Code | コメント / リンク / くり返し / 作業時間 / モバイル向け（次の1件・詰める・ホーム画面追加）を実装。スプレッドシートに `マネージャー集計` タブ（数式）を追加。ルーティン v2 案を更新 |

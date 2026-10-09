@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#1f3864">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="ZPタスク">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon-192.png">
   <title>ZPタスクボード</title>
   <link rel="stylesheet" href="style.css">
   <script type="module" src="app.js"></script>
@@ -34,7 +40,12 @@
     <main class="wrap">
       <p id="banner" class="banner" hidden></p>
       <div id="people" class="people" role="tablist" aria-label="担当者"></div>
-      <input id="q" class="search" type="search" placeholder="タスクを検索" aria-label="タスクを検索">
+      <div class="tools">
+        <input id="q" class="search" type="search" placeholder="タスクを検索" aria-label="タスクを検索">
+        <button id="density" class="tool-btn" type="button" aria-pressed="false" title="表示の密度を切り替え">≡ 詰める</button>
+        <a id="manager" class="tool-btn" target="_blank" rel="noopener">集計 ↗</a>
+      </div>
+      <section id="focus" class="focus" hidden></section>
       <div id="sections"></div>
     </main>
 
@@ -76,11 +87,35 @@
         <div id="f-status" class="seg"></div>
       </div>
 
+      <div class="field"><span>くり返し</span>
+        <div id="f-repeat-kind" class="seg"></div>
+        <div id="f-repeat-weekdays" class="chips" hidden></div>
+        <select id="f-repeat-dom" hidden aria-label="毎月の日付"></select>
+        <p id="f-repeat-note" class="muted small" hidden></p>
+      </div>
+
+      <div class="field"><span>関連リンク・ファイル</span>
+        <ul id="f-links-view" class="links"></ul>
+        <textarea id="f-links" rows="2" placeholder="1行に1つ。例: 図面 | https://drive.google.com/…"></textarea>
+        <p class="muted small">Google ドライブのファイルは、共有リンクを貼ってください。</p>
+      </div>
+
       <div class="field"><span>先に終わらせるタスク（前提）</span>
         <div id="f-blocked-chips" class="chips"></div>
         <input id="f-blocked-q" type="search" placeholder="前提にするタスクを探す" autocomplete="off">
         <ul id="f-blocked-list" class="pick"></ul>
       </div>
+
+      <section id="f-time-box" class="field" hidden><span>かかった時間</span>
+        <p id="f-time-total" class="small"></p>
+        <div id="f-time-btns" class="quick"></div>
+      </section>
+
+      <section id="f-comments-box" class="field" hidden><span>コメント</span>
+        <ul id="f-comments" class="comments"></ul>
+        <textarea id="f-comment" rows="2" placeholder="コメントを書く"></textarea>
+        <button type="button" id="f-comment-send" class="secondary">コメントを送る</button>
+      </section>
 
       <p id="editor-meta" class="muted small"></p>
       <p id="editor-error" class="msg" hidden></p>
@@ -94,7 +129,7 @@
 
   <div id="toast" class="toast" role="status" hidden>
     <span id="toast-text"></span>
-    <button id="toast-action" type="button" class="link"></button>
+    <span id="toast-actions" class="toast-actions"></span>
   </div>
   <noscript>このページには JavaScript が必要です。</noscript>
 </body>
