@@ -43,7 +43,8 @@ const storage = {
   set(k, v) { try { localStorage.setItem(k, v); } catch { /* 保存できなくても動く */ } },
   del(k) { try { localStorage.removeItem(k); } catch { /* 同上 */ } },
 };
-const who = () => state.me?.name ?? '';
+// 記録に残す名前は、メンバー表の名前（例「笠原 雄希」）にそろえる。集計で人ごとに数えるため。メンバー表に無い人は Google の名前
+const who = () => state.me?.assignee || state.me?.name || '';
 
 let toastTimer = null;
 /** actions: [{ label, fn }] */
