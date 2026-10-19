@@ -6,5 +6,5 @@ export const CONFIG = {
   managerGid: 6, // 「マネージャー集計」タブ（スプレッドシートのURL末尾の gid）
   membersTab: 'members',
   // docs/SETUP-GOOGLE.md の手順2で作った「クライアントID」を入れる（xxxx.apps.googleusercontent.com）
-  clientId: '',
+  clientId: '918800033556-0ei4v7ju6f41thcveq83kji9h2stdhhr.apps.googleusercontent.com',
 };
